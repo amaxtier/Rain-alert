@@ -1,7 +1,9 @@
+from dotenv import load_dotenv
 import os
-
 import requests
 from twilio.rest import Client
+
+load_dotenv(dotenv_path='.env')
 
 URL = "https://api.openweathermap.org/data/2.5/forecast"
 API_KEY = os.getenv('OWM_KEY')
@@ -23,9 +25,8 @@ weather_response = requests.get(
     params=parameters
 )
 weather_response.raise_for_status()
-print(weather_response.status_code)
+# print(weather_response.status_code)
 data = weather_response.json()["list"]
-print(data)
 
 will_rain = False
 
@@ -38,6 +39,5 @@ if will_rain:
     message = client.messages.create(
         body="Bring your umbrella!",
         from_="+18508208159",
-        to="+18297415255",
+        to=os.getenv('NUMBER'),
     )
-    print(message.status)
